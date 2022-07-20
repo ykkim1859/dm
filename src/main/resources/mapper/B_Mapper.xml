@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdk.dm.dao.B_DAO">
+	<!-- 게시글 작성 -->
+	<insert id="B_Write" parameterType="board">
+		INSERT INTO BOARD VALUES(BOARD_SEQ.NEXTVAL, #{BGROUP}, #{BMID}, #{BTITLE}, #{BCONTENT}, SYSDATE, 0, #{BFILENAME})
+	</insert>
+	<!-- 게시글 목록 -->
+	<select id="B_List" resultType="board">
+		SELECT * FROM BOARD WHERE BGROUP = #{BGROUP}
+	</select>
+	<!-- 게시글 갯수 -->
+	<select id="B_Count" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	<!-- 게시글 상세 -->
+	<select id="B_View" parameterType="int" resultType="board">
+		SELECT * FROM BOARD WHERE BNUM = #{BNUM}
+	</select>
+	<!-- 조회수 증가 -->
+	<update id="B_Hit" parameterType="int">
+		UPDATE BOARD SET BHIT = BHIT + 1 WHERE BNUM = #{BNUM}
+	</update>
+	<!-- 게시글 수정 -->
+	<update id="B_Modify" parameterType="board">
+		UPDATE BOARD SET BGROUP = #{BGROUP}, BTITLE = #{BTITLE}, BCONTENT = #{BCONTENT}, BFILENAME = #{BFILENAME} WHERE BNUM = #{BNUM}
+	</update>
+	<!-- 게시글 삭제 -->
+	<delete id="B_Delete" parameterType="int">
+		DELETE FROM BOARD WHERE BNUM = #{BNUM}
+	</delete>
+</mapper>

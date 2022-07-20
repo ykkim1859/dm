@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdk.dm.dao.M_DAO">
+    <!-- 회원 등록 -->
+    <insert id="M_Join" parameterType="member">
+        INSERT INTO MEMBER VALUES (#{MID}, #{MPW}, #{MNAME}, #{MBIRTH}, #{MEMAIL}, #{MPHONE}, #{MADDR}, #{MPROFILENAME}, 0)
+    </insert>
+    <!-- 회원 수 -->
+    <select id="M_Count" resultType="int">
+        SELECT COUNT(*) FROM MEMBER
+    </select>
+    <!-- 회원 목록 -->
+    <select id="M_List" resultType="member">
+        SELECT * FROM MLIST WHERE RN BETWEEN #{startRow} AND #{endRow}
+    </select>
+    <!-- 회원 상세 -->
+    <select id="M_View" parameterType="String" resultType="member">
+        SELECT * FROM MEMBER WHERE MID = #{MID}
+    </select>
+    <!-- 회원 삭제 -->
+    <delete id="M_Delete" parameterType="String">
+        DELETE FROM MEMBER WHERE MID = #{MID}
+    </delete>
+    <!-- 회원 수정 -->
+    <update id="M_Modify" parameterType="member">
+        UPDATE MEMBER
+        SET MPW          = #{MPW},
+            MNAME        = #{MNAME},
+            MBIRTH       = #{MBIRTH},
+            MEMAIL       = #{MEMAIL},
+            MPHONE       = #{MPHONE},
+            MADDR        = #{MADDR},
+            MPROFILENAME = #{MPROFILENAME}
+        WHERE MID = #{MID}
+    </update>
+    <!-- 로그인 -->
+    <select id="M_Login" parameterType="member" resultType="String">
+        SELECT MID FROM MEMBER WHERE MID = #{MID} AND MPW = #{MPW}
+    </select>
+</mapper>

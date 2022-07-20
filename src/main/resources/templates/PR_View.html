@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>상품 상세 페이지</title>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="SDK" />
+	<meta name="description" content="특별한 술을 체험" />
+	<meta name="date" content="2022월06월17일" />
+	<style>
+		.custom-table, .custom-table tr, .custom-table tr td, .custom-table tr th {
+			padding : 10px;
+			border: 1px solid #fac564;
+			text-align: center;
+		}
+		.custom-table {
+			width: 100%;
+		}
+		.custom-table tr th {
+			color: #fac564;
+		}
+		.ctable {
+			text-align: center;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<table>
+
+		<h2 class="h4" align="center">상품 상세</h2>
+
+		<tr>
+			<th>분류</th>
+			<td th:text="${product.TNAME}"></td>
+		</tr>
+
+		<tr>
+			<th>이름</th>
+			<td th:text="${product.PRNAME}"></td>
+		</tr>
+
+		<tr>
+			<th>가격</th>
+			<td th:text="${product.PRPRICE}"></td>
+		</tr>
+
+		<tr>
+			<th>설명</th>
+			<td th:text="${product.PRCONTENT}"></td>
+		</tr>
+
+		<tr>
+			<th>사진</th>
+			<td><img th:src="@{/PRFILE/{aa}(aa=${product.PRFILENAME})}" style="width: 200px;"/></td>
+		</tr>
+		<tr>
+			<th>종류</th>
+			<td th:text="${product.KNAME}"></td>
+		</tr>
+	</table>
+</body>
+</html>

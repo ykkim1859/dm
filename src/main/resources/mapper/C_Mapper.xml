@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sdk.dm.dao.C_DAO">
+	<!-- 댓글 목록 조회 -->
+	<select id="C_List" parameterType="int" resultType="comm">
+		SELECT * FROM COMM WHERE CBNUM = #{cbNum}
+	</select>
+	<!-- 댓글 작성 -->
+	<insert id="C_Write" parameterType="comm">
+		INSERT INTO COMM VALUES(COMM_SEQ.NEXTVAL, #{CBNUM}, #{CBGROUP}, #{CMID}, #{CCONTENT}, SYSDATE)
+	</insert>
+	<!-- 댓글 수정 -->
+	<update id="C_Modify" parameterType="comm">
+		UPDATE COMM SET CCONTENT = #{CCONTENT} WHERE CNUM = #{CNUM} AND CBNUM = #{CBNUM}
+	</update>
+	<!-- 댓글 삭제 -->
+	<delete id="C_Delete" parameterType="comm">
+		DELETE FROM COMM WHERE CNUM = #{CNUM} AND CBNUM = #{CBNUM}
+	</delete>
+</mapper>

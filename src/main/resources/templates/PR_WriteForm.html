@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <meta name="author" content="SDK" />
+    <meta name="description" content="관리자 - 상품 등록 페이지" />
+    <meta name="date" content="2022. 06. 17" />
+    <title>관리자 - 상품 등록 페이지</title>
+</head>
+<body>
+
+    <form action="PR_Write" method="POST" enctype="multipart/form-data">
+
+        <table>
+
+            <h2 class="h4" align="center">상품 등록</h2>
+
+            <tr>
+                <th>상품분류</th>
+                <td>
+                    <select name="PRTNUM" onchange="selectBox(this.value)">
+                        <option>--선택 --</option>
+                        <option value="1">술</option>
+                        <option value="2">안주</option>
+                        <option value="3">기타</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <th>상품명</th>
+                <td><input type="text" name="PRNAME"></td>
+            </tr>
+
+            <tr>
+                <th>가격</th>
+                <td><input type="text" name="PRPRICE"></td>
+            </tr>
+
+            <tr>
+                <th>설명</th>
+                <td><input type="text" name="PRCONTENT"></td>
+            </tr>
+
+            <tr>
+                <th>사진</th>
+                <td><input type="file" name="PRFILE"></td>
+            </tr>
+
+            <tr id="alcohol">
+
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="등록" />
+                </td>
+            </tr>
+
+        </table>
+
+    </form>
+
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-migrate-3.0.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/jquery.stellar.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/aos.js"></script>
+<script src="js/jquery.animateNumber.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/jquery.timepicker.min.js"></script>
+<script src="js/scrollax.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+    var selectBox = function(value){
+        var alcohol = $("#alcohol");
+        var output = "";
+        if(value == 1){
+            output += "<th>술 종류</th>";
+            output += "<td>";
+            output += "<select name='PRKNUM'>";
+            output += "<option value='1'>와인</option>";
+            output += "<option value='2'>막걸리</option>";
+            output += "<option value='3'>과실주</option>";
+            output += "<option value='4'>맥주</option>";
+            output += "<option value='5'>사케</option>";
+            output += "</select>";
+            output += "</td>";
+            alcohol.html(output);
+        } else if(value == 2) {
+            output += "<input type='hidden' name='PRKNUM' value='6'/>";
+            alcohol.html(output);
+        } else {
+            output += "<input type='hidden' name='PRKNUM' value='7'>";
+            alcohol.html(output);
+        }
+    }
+</script>
+</html>

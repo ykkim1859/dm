@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+		<div class="container">
+			<a class="navbar-brand" href="index"><img src="images/logo.png"/></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#ftco-nav" aria-controls="ftco-nav"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="oi oi-menu"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="ftco-nav">
+				<div>
+					<button class="btn btn-white btn-outline-white" th:unless="${session.loginId ne null}" onclick="location.href='M_JoinForm'">회원가입</button>
+					<button class="btn btn-white btn-outline-white" th:if="${session.loginId ne null}" onclick="location.href='M_logout'">로그아웃</button>
+					<a class="btn btn-white btn-outline-white" th:if="${session.loginId ne null}" th:href="@{M_View(MID=${session.loginId})}">내 정보</a>
+					<a class="btn btn-white btn-outline-white" th:if="${session.loginId ne null && session.loginId ne 'admin'}" th:href="@{MP_List(PMID=${session.loginId})}">내 결제내역</a>
+					<button class="btn btn-white btn-outline-white" th:unless="${session.loginId ne null}" onclick="location.href='M_LoginForm'">로그인</button>
+
+					<a class="btn btn-white btn-outline-white" th:if="${session.loginId ne null && session.loginId ne 'admin'}" th:href="@{CA_List(CAMID=${session.loginId})}">장바구니</a>
+					<span th:if="${session.loginId ne null}" th:text="${session.loginId} + '님 접속중!'"></span>
+				</div>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item hover-menu">
+						<a href="#" class="nav-link">술</a>
+						<ul class="dropdown">
+							<li><a href="MPR_List?PRTNUM=1&PRKNUM=1">와인</a></li>
+							<li><a href="MPR_List?PRTNUM=1&PRKNUM=2">막걸리</a></li>
+							<li><a href="MPR_List?PRTNUM=1&PRKNUM=3">과실주</a></li>
+							<li><a href="MPR_List?PRTNUM=1&PRKNUM=4">맥주</a></li>
+							<li><a href="MPR_List?PRTNUM=1&PRKNUM=5">사케</a></li>
+						</ul>
+					</li>
+					<li class="nav-item"><a href="MPR_List?PRTNUM=2&PRKNUM=6" class="nav-link">안주</a></li>
+					<li class="nav-item"><a href="MPR_List?PRTNUM=3&PRKNUM=7" class="nav-link">기타용품</a></li>
+					<li class="nav-item"><a href="B_List?BGROUP=notice" class="nav-link">커뮤니티</a></li>
+				</ul>
+			</div>
+		</div>
+		<div th:if="${session.loginId ne null && session.loginId ne 'admin'}" id="kakao-talk-channel-chat-button"></div>
+
+		<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+		<script type='text/javascript'>
+			//<![CDATA[
+			// 사용할 앱의 JavaScript 키를 설정해 주세요.
+			Kakao.init('0df7559eacb0f34a8e7a0ed6da03cf99');
+			// 카카오톡 채널 1:1채팅 버튼을 생성합니다.
+			Kakao.Channel.createChatButton({
+				container: '#kakao-talk-channel-chat-button',
+				channelPublicId: '_xclvgb' // 카카오톡 채널 홈 URL에 명시된 ID
+			});
+			//]]>
+		</script>
+	</nav>
+</html>

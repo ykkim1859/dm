@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>회원별 결제내역 상세보기</title>
+  <!-- META TAG -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="SDK" />
+  <meta name="description" content="특별한 술을 체험" />
+  <meta name="date" content="2022월06월17일" />
+  <style>
+    table{
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+    tr, td, th {
+      border:1px solid #222;
+      padding: 10px;
+    }
+    .paging ul {
+      display: flex;
+      justify-content: center;
+    }
+    a, a:hover, a:active, a:visited {
+      text-decoration: none;
+      color: #222;
+    }
+    .paging ul li {
+      list-style: none;
+      border : 1px solid #222;
+      border-radius: 50%;
+      width: 30px;
+      line-height: 30px;
+      text-align: center;
+      height: 30px;
+      margin: 0 2px;
+    }
+  </style>
+</head>
+<body>
+<h2 class="h4" align="center">회원별 결제내역 정보</h2>
+<table class="custom-table">
+  <colgroup>
+    <col width="16%" />
+    <col width="16%" />
+    <col width="16%" />
+    <col width="16%" />
+    <col width="20%" />
+    <col width="16%" />
+  </colgroup>
+  <thead>
+  <tr>
+    <th>결제 번호</th>
+    <th>결제 회원 아이디</th>
+    <th>결제 날짜</th>
+    <th>픽업 가맹점</th>
+    <th>결제 상품</th>
+    <th>결제 금액</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="list:${pay}">
+    <input type="hidden" th:value="${list.PSNUM}" name="PSNUM" />
+    <input type="hidden" th:value="${list.PCANUM}" name="PCANUM" />
+    <td th:text="${list.PNUM}"></td>
+    <td th:text="${list.PMID}"></td>
+    <td th:text="${#dates.format(list.PDATE,'yyyy-MM-dd')}"></td>
+    <td th:text="${list.SNAME}"></td>
+    <td><img th:src="@{/PRFILE/{bb}(bb=${list.PRFILENAME})}" style="width: 100%;"/>
+      <h5 style="margin-bottom: 0; font-size: 1.05rem;" th:text="${list.PRNAME}"></h5>
+    </td>
+    <td th:text="${list.PTOTAL}" ></td>
+  </tr>
+  </tbody>
+</table>
+<div class="col-md-12 mb-3" style="text-align: center;">
+  <br/><a class="btn btn-primary py-3 px-5"  href="javascript:history.back();">뒤로가기</a>
+  <a class="btn btn-primary py-3 px-5"  href="index">메인화면</a>
+</div>
+</body>
+</html>

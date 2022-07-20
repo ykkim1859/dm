@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sdk.dm.dao.P_DAO">
+	<!-- 카트 끌고오기 -->
+	<select id="P_WriteForm" parameterType="String" resultType="capr">
+		SELECT CA.CANUM, PR.PRNUM, PR.PRTNUM, PR.PRNAME, PR.PRCONTENT, PR.PRFILENAME, CA.CAMID, CA.CACOUNT, CA.CATOTAL, CA.CAPRICE
+		FROM CART CA, PRODUCT PR
+		WHERE CAMID = #{CAMID} AND PR.PRNUM = CA.CAPRNUM
+	</select>
+	<!-- 포인트 잔액 조회 -->
+	<select id="M_Total" parameterType="String" resultType="member">
+		SELECT MPOINT FROM MEMBER WHERE MID = #{MID}
+	</select>
+	<!-- 가맹점 조회 -->
+	<select id="PS_List" resultType="shop">
+		SELECT * FROM SHOP
+	</select>
+	<!-- 결제내역 저장 -->
+	<insert id="P_Write" parameterType="pay">
+		INSERT INTO PAY VALUES(PAY_SEQ.NEXTVAL, #{PMID}, SYSDATE, #{PSNUM}, #{PCANUM}, #{PTOTAL})
+	</insert>
+	<!-- 결제내역 상세 : 회원 -->
+	<select id="MP_List" parameterType="String" resultType="payList">
+		SELECT P.PNUM, P.PMID, P.PDATE, S.SNAME, P.PTOTAL, PR.PRNAME, PR.PRFILENAME
+		FROM PAY P, SHOP S, PRODUCT PR, CART CA
+		WHERE PMID = #{PMID} AND S.SNUM = P.PSNUM AND PR.PRNUM = CA.CAPRNUM AND CA.CANUM = P.PCANUM
+	</select>
+	<!-- 결제내역 삭제(취소) : 회원 -->
+	<delete id="MP_Delete" parameterType="int">
+		DELETE FROM PAY WHERE PNUM =#{PNUM}
+	</delete>
+	<!-- 결제내역 목록 : 관리자 -->
+   <select id="P_List" resultType="pay">
+      SELECT P.PNUM, P.PMID, P.PDATE, S.SNAME, P.PTOTAL, PR.PRNAME, PR.PRFILENAME
+      FROM PAY P, SHOP S, PRODUCT PR, CART CA
+      WHERE S.SNUM = P.PSNUM AND PR.PRNUM = CA.CAPRNUM AND CA.CANUM = P.PCANUM
+   </select>
+   <!-- 회원별 결제내역 상세 : 관리자 -->
+   <select id="P_View" parameterType="String" resultType="pay">
+      SELECT P.PNUM, P.PMID, P.PDATE, S.SNAME, P.PTOTAL, PR.PRNAME, PR.PRFILENAME
+      FROM PAY P, SHOP S, PRODUCT PR, CART CA
+      WHERE PMID = #{PMID} AND S.SNUM = P.PSNUM AND PR.PRNUM = CA.CAPRNUM AND CA.CANUM = P.PCANUM
+   </select>
+</mapper>

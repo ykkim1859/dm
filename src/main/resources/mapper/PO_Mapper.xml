@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sdk.dm.dao.PO_DAO">
+
+    <!-- 게임한 회원 아이디 조회 - 관리자 -->
+    <select id="PO_Game" parameterType="String" resultType="game">
+        SELECT * FROM GAME WHERE GMID = #{GMID}
+    </select>
+
+    <!-- 포인트 적립 - 관리자 -->
+    <insert id="PO_Write" parameterType="pointgame">
+        INSERT INTO POINT VALUES(#{POMID}, #{POGRESULT}, SYSDATE, #{POPAY}, #{POGET}, #{POUSE})
+    </insert>
+
+    <!-- 잔액 update -->
+    <update id="PO_Total" parameterType="pointgame">
+        UPDATE MEMBER SET MPOINT = MPOINT + #{POGET} WHERE MID = #{POMID}
+    </update>
+
+    <!-- 포인트 적립 목록 - 관리자 -->
+    <select id="PO_List" parameterType="String" resultType="point">
+        SELECT * FROM POINT WHERE POMID = #{MID}
+    </select>
+
+	<!-- 포인트 잔액 조회 -->
+	<select id="PT_Total" parameterType="String" resultType="int">
+		SELECT MPOINT FROM MEMBER WHERE MID = #{MID}
+	</select>
+</mapper>

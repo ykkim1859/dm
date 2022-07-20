@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width-device-width, initial-scale=1.0">
+  <meta name="author" content="SDK" />
+  <meta name="description" content="관리자 - 포인트 적립 페이지" />
+  <meta name="date" content="2022. 06. 21" />
+  <title>관리자 - 포인트 적립 페이지</title>
+</head>
+
+<body>
+
+<table>
+  <h2 class="h4" align="center">포인트 적립</h2>
+  <tr>
+    <td>
+
+      <input type="text" name="POMID" id="GMID" />
+      <button id="midSearch">검색</button>
+    </td>
+  </tr>
+</table>
+<form action="PO_Write" method="POST">
+  <input type="hidden" value="0" name="POUSE"/>
+  <input type="hidden" value="0" name="POPAY"/>
+  <input type="hidden" value="10" name="POGET"/>
+  <table>
+    <tr>
+      <td>
+        <div id="winner"></div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="submit" value="적립" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function (){
+    $("#midSearch").click(function (){
+      var GMID = $("#GMID").val();
+      $.ajax({
+        type : "POST",
+        url : "PO_Game",
+        data : {"GMID" : GMID},
+        dataType : "json",
+        success : function (game){
+          gameResult(game);
+        },
+        error : function (){
+          alert("통신 실패!");
+        }
+      })
+    });
+  });
+  // 게임 결과 이기지 않은 회원은 아이디를 출력하지 않고, 이긴 회원만 아이디 출력!
+  function gameResult(game){
+    var output = "";
+    // 내역 조회를 위한 반복
+    for(var i in game) {
+
+      output += "<div>";
+      output += "<p>적립 아이디 : " + game[i].gmid +"</p>";
+      output += "<p>게임 결과 : " + game[i].gresult +"</p>";
+      output += "<p>적립 일시 : " + game[i].gdate +"</p>";
+      output += "<p>-------------------------------------------------</p>";
+      output += "</div>";
+
+    }
+    // 아이디를 전달하기 위한(검색한 아이디) 인풋
+    output += "<input type='hidden' name='POMID' value='" + game[i].gmid +"'/>";
+    output += "<input type='hidden' name='POGRESULT' value='"+ game[i].gresult +"'/>";
+    var winner = document.getElementById("winner");
+    winner.innerHTML = output;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>내 정보</title>
+    <!-- META TAG -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="SDK" />
+	<meta name="description" content="특별한 술을 체험" />
+	<meta name="date" content="2022년 06월 17일" />
+	<!-- CSS, FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<!-- navigation : start -->
+	<nav th:replace="nav.html :: nav"></nav>
+	<!-- navigation : end -->
+	<!-- background : start -->
+	<section class="bg-wrap"></section>
+	<!-- background : end -->
+	<section class="contact-section">
+	    <div class="container mt-5">
+	        <div class="row block-9">
+	            <div class="col-md-12">
+	                <div class="row">
+	                    <div class="col-md-12 mb-4">
+	                        <h2 class="h4">내 정보</h2>
+	                    </div>
+	                        <div class="col-md-12 mb-3">
+	                            <span>아이디:</span> <span th:text="${member.MID}"></span>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <span>이름:</span> <span th:text="${member.MNAME}"></span>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <span>생년월일:</span> <span th:text="${#dates.format(member.MBIRTH,'yyyy-MM-dd')}"></span>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <span>이메일:</span> <span th:text="${member.MEMAIL}"></span>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <span>연락처:</span> <span th:text="${member.MPHONE}"></span>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <span>주소:</span> <span th:text="${member.MADDR}"></span>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <span>프로필 사진:</span> <img th:src="@{/MPROFILE/{aa}(aa=${member.MPROFILENAME})}">
+	                        </div>
+	                        <div class="col-md-12 mb-3" th:if="${session.loginId ne 'admin'}" >
+	                            <span><a th:href="@{PO_List(MID=${member.MID})}">포인트 적립 내역</a></span>
+	                        </div>
+	
+	                        <div class="form-group col-md-12">
+	                            <div class="form-group">
+	                                <a class="btn btn-primary py-3 px-5"  th:if="${session.loginId ne null && session.loginId ne 'admin'}" th:href="@{M_ModiForm(MID=${member.MID})}">회원수정</a>
+	                                <a class="btn btn-primary py-3 px-5"  th:if="${session.loginId ne null && session.loginId ne 'admin'}" th:href="@{M_Delete(MID=${member.MID})}">회원탈퇴</a>
+	                            </div>
+	                        </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+	<!-- footer : start -->
+	<footer th:replace="footer.html :: footer"></footer>
+	<!-- footer : end -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-migrate-3.0.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.stellar.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/aos.js"></script>
+	<script src="js/jquery.animateNumber.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/jquery.timepicker.min.js"></script>
+	<script src="js/scrollax.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+	    function sample6_execDaumPostcode() {
+	        new daum.Postcode({
+	            oncomplete: function (data) {
+	                var addr = ''; // 주소 변수
+	                var extraAddr = ''; // 참고항목 변수
+	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                    addr = data.roadAddress;
+	                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                    addr = data.jibunAddress;
+	                }
+	                if (data.userSelectedType === 'R') {
+	                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+	                        extraAddr += data.bname;
+	                    }
+	                    if (data.buildingName !== '' && data.apartment === 'Y') {
+	                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                    }
+	                    if (extraAddr !== '') {
+	                        extraAddr = ' (' + extraAddr + ')';
+	                    }
+	
+	                }
+	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	                document.getElementById('sample6_postcode').value = data.zonecode;
+	                document.getElementById("sample6_address").value = addr;
+	                // 커서를 상세주소 필드로 이동한다.
+	                document.getElementById("sample6_detailAddress").focus();
+	            }
+	        }).open();
+	    }
+	</script>
+</html>

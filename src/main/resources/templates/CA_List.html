@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>장바구니 목록</title>
+	<!-- META TAG -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="SDK" />
+	<meta name="description" content="특별한 술을 체험" />
+	<meta name="date" content="2022월06월17일" />
+	<!-- CSS, FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+    	table {
+    		width: 100%;
+    	}
+    	table tr, table td, table td, table th {
+    		border: 1px solid #fac564;
+    	}
+    	table tr td {
+    		padding : 15px;
+    	}
+    	table * {
+    		text-align: center;
+    	}
+    	#CACOUNT {
+    		width: 40px;
+    		height: 28px !important;
+    		margin: 0 auto;
+    	}
+    	table tr td:nth-of-type(2), table tr td:nth-of-type(3) {
+    		border: none;
+    	}
+    	#PTOTAL{
+    		border: none;
+    		background: none;
+    		color: #fff;
+    		pointer-events: none; 
+    		width: 120px;
+    		text-align: right;
+    	}
+    </style>
+    <th:block th:if="${session.loginId eq null}">
+		<script>
+			alert('로그인 후 이용해 주세요.');
+			location.href="M_LoginForm";
+		</script>
+	</th:block>
+</head>
+<body>
+	<!-- navigation : start -->
+	<nav th:replace="nav.html :: nav"></nav>
+	<!-- navigation : end -->
+	<!-- background : start -->
+	<section class="bg-wrap"></section>
+	<!-- background : end -->
+	<section class="ftco-section contact-section">
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col-md-12">
+					<a class="btn btn-white btn-outline-white mb-2" th:href="@{CA_DeleteAll(CAMID=${session.loginId})}">전체 삭제</a>
+					<table class="custom-table">
+						<colgroup>
+							<col width="5%" />
+							<col width="20%" />
+							<col width="35%" />
+							<col width="10%" />
+							<col width="10%" />
+							<col width="10%" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th>번호</th>
+								<th colspan="2">상품</th>
+								<th>수량</th>
+								<th>단가</th>
+								<th>합계</th>
+								<th>삭제</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="list:${cart}" id="tableContent">
+								<td th:text="${list.CANUM}"></td>
+								<td><img th:src="@{/PRFILE/{bb}(bb=${list.PRFILENAME})}" style="width: 100%;"/></td>
+								<td>
+									<h5 style="margin-bottom: 0; font-size: 1.05rem;" th:text="${list.PRNAME}"></h5>
+									<th:block id="PRCONTENT" th:text="${list.PRCONTENT}"></th:block>
+								</td>
+								<td>
+									<form action="CA_Modify" method="POST" onsubmit="countCheck();" class="contact-form">
+										<input type="hidden" name="CAMID" id="CAMID" th:value="${list.CAMID}" />
+										<input type="hidden" name="CANUM" id="CANUM" th:value="${list.CANUM}"/>
+										<input type="hidden" name="CATOTAL" id="CATOTAL" th:value="${list.CATOTAL}" />
+										<input type="hidden" name="CAPRICE" id="CAPRICE" th:value="${list.CAPRICE}" />
+										<div class="form-group">
+											<input type="text" name="CACOUNT" id="CACOUNT" class="form-control" th:placeholder="${list.CACOUNT}" />
+										</div>
+										<input type="submit" class="btn btn-white btn-outline-white" value="수량 변경" />
+									</form>
+								</td>
+								<td th:text="${list.CAPRICE}"></td>
+								<td th:text="${list.CATOTAL}"></td>
+								<td>
+									<a class="btn btn-white btn-outline-white mb-2" th:href="@{CA_DeleteChoice(CANUM=${list.CANUM}, CAMID=${list.CAMID})}">삭제</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div style="display: flex; align-items: center; justify-content: space-between;">
+						<h5 class="mt-3" style="display: flex; justify-content: flex-start;">
+							총 합계 : <input type="text" id="PTOTAL" name="PTOTAL" value="0"/> 원
+						</h5>
+						<a class="btn btn-primary" style="height: 40px;" th:href="@{P_WriteForm(CAMID=${session.loginId})}">구매하기</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- footer : start -->
+	<footer th:replace="footer.html :: footer"></footer>
+	<!-- footer : end -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-migrate-3.0.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.stellar.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/aos.js"></script>
+	<script src="js/jquery.animateNumber.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/jquery.timepicker.min.js"></script>
+	<script src="js/scrollax.min.js"></script>
+	<script src="js/main.js"></script>
+	<script>
+		/* 2022.07.03 함수 추가 : form 버튼의 submit 클릭 시 실행 */
+		/* form 내용을 controller로 보내기 전 실행 */
+		function countCheck() {
+			// form의 submit 버튼 클릭 시 해당 함수 실행
+		    var count = document.getElementById("CACOUNT").value;
+			// 변수 count에 CACOUNT라는 아이디를 가진 요소의 value(값)를 담음
+		    if(count == '0' || Number(count) < 0){
+		    	// 값이 0이거나 0보다 작으면 알림 띄우고
+		    	alert("최소 구매 수량은 1개입니다.");
+		    	// 이벤트 정지함수 실행
+		    	return validate(event);
+		    } else if(count == '-' || count == null){
+		    	// 값이 -이거나 아무것도 입력하지 않으면
+		    	alert("수량을 다시 입력 해 주세요.");
+		    	// 이벤트 정지함수 실행
+		    	return validate(event);
+		    } else if(Number(count) > 10){
+		    	// 값이 10보다 크면
+		    	alert("최대 구매 수량은 10개입니다.");
+		    	// 이벤트 정지함수 실행
+		    	return validate(event);
+		    }
+		}
+		// 전송 이벤트 제어 : form태그에서 java로 이동하는 이벤트를 막기
+		function validate(event) {
+			// 현재 페이지를 새로고침 하고
+			window.location.reload();
+			// 이벤트를 정지
+			event.preventDefault();
+		}
+		$(document).ready(function(){
+			// 문서가 시작되면 해당 함수 실행
+			// tableContent : th:each가 들어간 tr 요소
+			// .length : 해당 요소의 길이(크기)
+			var tableContent = $("#tableContent").length;
+			// CAMID 의 value
+			var CAMID = $("#CAMID").val();
+			// tr의 길이가 0보다 크면 ajax 실행
+			if(tableContent > 0){
+				$.ajax({
+					type : "POST",
+					url : "CA_PTotal",
+					data : {"CAMID": CAMID},
+					dataType : "json",
+					success : function(result){
+						CA_PTotal(result);
+					},
+					error : function(){
+						alert("총 합계 출력 실패!");
+					}
+				});
+			}
+		});
+		// 총 합계를 더해주는 함수
+		function CA_PTotal(result){
+			var total = 0;
+			for(var i in result){
+				total += result[i];
+			}
+			var PTOTAL = document.getElementById("PTOTAL").value = total;
+		}
+	</script>
+</body>
+</html>

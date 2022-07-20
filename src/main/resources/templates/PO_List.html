@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>포인트 내역</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="SDK" />
+    <meta name="description" content="특별한 술을 체험" />
+    <meta name="date" content="2022월06월17일" />
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="../css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../css/magnific-popup.css">
+    <link rel="stylesheet" href="../css/aos.css">
+    <link rel="stylesheet" href="../css/ionicons.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../css/jquery.timepicker.css">
+    <link rel="stylesheet" href="../css/flaticon.css">
+    <link rel="stylesheet" href="../css/icomoon.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+       caption {
+          font-size: 1.2rem;
+          text-align: center;
+          font-weight: 600;
+       }
+        .custom-table, .custom-table tr, .custom-table tr td, .custom-table tr th {
+            padding : 10px;
+            border: 1px solid #fac564;
+            text-align: center;
+        }
+        .custom-table {
+            width: 100%;
+        }
+        .custom-table tr th {
+            color: #fac564;
+        }
+        table a {
+            border-bottom: 1px solid transparent;
+        }
+        table a:hover {
+            border-bottom: 1px solid #fac564;
+            transition: ease 0.5s;
+        }
+    </style>
+</head>
+<body>
+   <!-- navigation : start -->
+   <nav th:replace="nav.html :: nav"></nav>
+   <!-- navigation : end -->
+   <!-- background : start -->
+   <section class="bg-wrap"></section>
+   <!-- background : end -->
+   <section class="ftco-section contact-section">
+       <div class="container mt-5">
+           <div class="row">
+              <input type="hidden" th:value="${session.loginId}" id="loginId"/>
+              <!-- 잔여 포인트 출력 -->
+              <p class="col-md-12" style="text-align: center; font-size: 1.2rem; font-weight: 600;">
+                 <span th:text="${session.loginId} + '님 잔여 포인트 : '"></span><span id="total"></span>
+              </p>
+               <table class="custom-table">
+                   <colgroup>
+                       <col width="20%" />
+                       <col width="20%" />
+                       <col width="20%" />
+                       <col width="20%" />
+                       <col width="20%" />
+                   </colgroup>
+                   <tr>
+                       <th>적립일</th>
+                       <th>적립 내역</th>
+                       <th>적립 포인트</th>
+                       <th>사용 내역</th>
+                       <th>사용 포인트</th>
+                   </tr>
+                   <tr th:each="list:${point}">
+                       <td th:text="${#dates.format(list.PODATE,'yyyy-MM-dd')}"></td>
+                       <td th:text="${list.POGRESULT}"></td>
+                       <td th:text="${list.POGET}"></td>
+                       <td th:text="${list.POPAY}"></td>
+                       <td th:text="${list.POUSE}"></td>
+                   </tr>
+               </table>
+           </div>
+       </div>
+   </section>
+   <!-- footer : start -->
+   <footer th:replace="footer.html :: footer"></footer>
+   <!-- footer : end -->
+   <script src="../js/jquery.min.js"></script>
+   <script src="../js/jquery-migrate-3.0.1.min.js"></script>
+   <script src="../js/popper.min.js"></script>
+   <script src="../js/bootstrap.min.js"></script>
+   <script src="../js/jquery.easing.1.3.js"></script>
+   <script src="../js/jquery.waypoints.min.js"></script>
+   <script src="../js/jquery.stellar.min.js"></script>
+   <script src="../js/owl.carousel.min.js"></script>
+   <script src="../js/jquery.magnific-popup.min.js"></script>
+   <script src="../js/aos.js"></script>
+   <script src="../js/jquery.animateNumber.min.js"></script>
+   <script src="../js/bootstrap-datepicker.js"></script>
+   <script src="../js/jquery.timepicker.min.js"></script>
+   <script src="../js/scrollax.min.js"></script>
+   <script src="../js/main.js"></script>
+   <script>
+   $(document).ready(function(){
+      var MID = $("#loginId").val();
+      // 포인트 잔액 조회
+      $.ajax({
+         type : "POST",
+         url : "PT_Total",
+         data : {"MID": MID},
+         dataType : "text",
+         success : function(total){
+            PT_Total(total);
+         },
+         error : function(){
+            // 통신 실패 시 실행
+            alert('잔액 조회 실패!');
+         }
+      });
+   });
+   function PT_Total(total){
+      var ptTotal = document.getElementById("total");
+      var output = "";
+      output += "<span'>" + total + "p </span>";
+      ptTotal.innerHTML = output;
+   }
+   </script>
+</body>
+</html>

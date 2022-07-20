@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>결제창</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="SDK" />
+    <meta name="description" content="특별한 술을 체험" />
+    <meta name="date" content="2022월06월17일" />
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="../css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../css/magnific-popup.css">
+    <link rel="stylesheet" href="../css/aos.css">
+    <link rel="stylesheet" href="../css/ionicons.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../css/jquery.timepicker.css">
+    <link rel="stylesheet" href="../css/flaticon.css">
+    <link rel="stylesheet" href="../css/icomoon.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        caption {
+            font-size: 1.2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        .custom-table, .custom-table tr, .custom-table tr td, .custom-table tr th {
+            padding : 10px;
+            border: 1px solid #fac564;
+            text-align: center;
+        }
+        .custom-table {
+            width: 100%;
+        }
+        .custom-table tr th {
+            color: #fac564;
+        }
+        #PTOTAL, #CATOTAL{
+        	border: none;
+    		background: none;
+    		color: #fff;
+    		pointer-events: none; 
+    		width: 50px;
+    		text-align: right;
+        }
+        #map {
+        	color: #222;
+        }
+        .form-control {
+        	width: 60px;
+        	height: 35px !important;
+        	text-align: center;
+        	margin: 0 auto;
+        	font-size: 15px;
+        }
+    </style>
+    <th:block th:if="${session.loginId eq null}">
+		<script>
+			alert('로그인 후 이용해 주세요.');
+			location.href="M_LoginForm";
+		</script>
+	</th:block>
+</head>
+<body>
+<!-- navigation : start -->
+<nav th:replace="nav.html :: nav"></nav>
+<!-- navigation : end -->
+<!-- background : start -->
+<section class="bg-wrap"></section>
+<!-- background : end -->
+<section class="ftco-section contact-section">
+    <div class="container mt-5">
+        <div class="row">
+            <p class="col-md-12" style="text-align: center; font-size: 1.2rem; font-weight: 600;">
+                <span th:text="${session.loginId} + '님 결제창'"></span>
+                <input type="hidden" name="CAMID" id="CAMID" th:value="${session.loginId}" />
+            </p>
+            <div class="col-md-12">
+            	<table class="custom-table">
+					<colgroup>
+						<col width="5%" />
+						<col width="20%" />
+						<col width="35%" />
+						<col width="10%" />
+						<col width="10%" />
+						<col width="10%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th>번호</th>
+							<th colspan="2">상품</th>
+							<th>수량</th>
+							<th>단가</th>
+							<th colspan="2">합계</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="list:${cart}" id="tableContent">
+                            <input type="hidden" id="PCANUM" th:value="${list.CANUM}"/>
+							<td th:text="${list.CANUM}"></td>
+							<td><img th:src="@{/PRFILE/{bb}(bb=${list.PRFILENAME})}" style="width: 100%;"/></td>
+							<td>
+								<h5 style="margin-bottom: 0; font-size: 1.05rem;" th:text="${list.PRNAME}"></h5>
+								<th:block id="PRCONTENT" th:text="${list.PRCONTENT}"></th:block>
+							</td>
+							<td th:text="${list.CACOUNT}"></td>
+							<td th:text="${list.CAPRICE}"></td>
+							<td th:text="${list.CATOTAL}"></td>
+						</tr>
+					</tbody>
+				</table>
+            </div>
+            <div class="col-md-12 mt-5">
+                <div id="map" style="width:100%;height:350px;"></div>
+            </div>
+            <form class="col-md-12 mt-4" action="P_Write" method="POST">
+                <table class="custom-table">
+                    <colgroup>
+                        <col width="30%" />
+                        <col width="70%" />
+                    </colgroup>
+                     <tr>
+                        <td>가맹점 선택</td>
+                        <td>
+                            <select name="SNUM" id="shop"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>총 결제 금액</td>
+                        <td><input type="text" id="CATOTAL" value="0"/>원</td>
+                    </tr>
+                    <tr>
+                        <td>사용 포인트</td>
+                        <td id="usePoint" class="form-group"></td>
+                    </tr>
+                    <tr>
+                    	<td>잔여 포인트</td>
+                    	<td id="restPoint"></td>
+                    </tr>
+                    <tr>
+                        <td>나머지 결제 금액</td>
+                        <td id="restPrice"></td>
+                    </tr>
+                </table>
+            </form>
+            <div class="col-md-12 mt-3" style="text-align: right;">
+            	<button class="btn btn-primary" id="purchase">결제하기</button>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- footer : start -->
+<footer th:replace="footer.html :: footer"></footer>
+<!-- footer : end -->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery-migrate-3.0.1.min.js"></script>
+<script src="../js/popper.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/jquery.waypoints.min.js"></script>
+<script src="../js/jquery.stellar.min.js"></script>
+<script src="../js/owl.carousel.min.js"></script>
+<script src="../js/jquery.magnific-popup.min.js"></script>
+<script src="../js/aos.js"></script>
+<script src="../js/jquery.animateNumber.min.js"></script>
+<script src="../js/bootstrap-datepicker.js"></script>
+<script src="../js/jquery.timepicker.min.js"></script>
+<script src="../js/scrollax.min.js"></script>
+<script src="../js/main.js"></script>
+<!-- 카카오 지도 -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0df7559eacb0f34a8e7a0ed6da03cf99"></script>
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(37.4002, 126.9451), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+    // 마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다
+    var positions = [
+        {
+            content: '<div>동탄 호수공원점</div>',
+            latlng: new kakao.maps.LatLng(37.1675, 127.0941)
+        },
+        {
+            content: '<div>거여점</div>',
+            latlng: new kakao.maps.LatLng(37.4932, 127.1478)
+        },
+        {
+            content: '<div>대전 대흥점</div>',
+            latlng: new kakao.maps.LatLng(37.4932, 127.1478)
+        },
+        {
+            content: '<div>평택 법원점</div>',
+            latlng: new kakao.maps.LatLng(37.0090055000002, 127.08946845393726)
+        },
+        {
+            content: '<div>성남 신흥점</div>',
+            latlng: new kakao.maps.LatLng(37.44467739999998, 127.14470315393618)
+        },
+        {
+            content: '<div>태안점</div>',
+            latlng: new kakao.maps.LatLng(36.74509780000015, 126.29987265393912)
+        },
+        {
+            content: '<div>진해 풍호점</div>',
+            latlng: new kakao.maps.LatLng(35.13108659999966, 128.7083399999998)
+        },
+        {
+            content: '<div>충북 혁신도시점</div>',
+            latlng: new kakao.maps.LatLng(36.90642219999968, 127.52434541574803)
+        },
+        {
+            content: '<div>포항 남구점</div>',
+            latlng: new kakao.maps.LatLng(36.01602209999946, 129.32849731574518)
+        },
+        {
+            content: '<div>광양점</div>',
+            latlng: new kakao.maps.LatLng(34.941759299999944, 127.69428749999972)
+        },
+        {
+            content: '<div>일산 가로수길점</div>',
+            latlng: new kakao.maps.LatLng(37.6657, 126.7568)
+        },
+        {
+            content: '<div>안양본점</div>',
+            latlng: new kakao.maps.LatLng(37.4002, 126.9451)
+        }
+    ];
+
+    for (var i = 0; i < positions.length; i ++) {
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            map: map, // 마커를 표시할 지도
+            position: positions[i].latlng // 마커의 위치
+        });
+
+        // 마커에 표시할 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content: positions[i].content // 인포윈도우에 표시할 내용
+        });
+
+        // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+        // 이벤트 리스너로는 클로저를 만들어 등록합니다
+        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+        kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+        kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+    }
+
+    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+    function makeOverListener(map, marker, infowindow) {
+        return function() {
+            infowindow.open(map, marker);
+        };
+    }
+
+    // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+    function makeOutListener(infowindow) {
+        return function() {
+            infowindow.close();
+        };
+    }
+
+</script>
+<!-- 카카오페이 : import -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+<script>
+   $("#purchase").click(function () {
+      var IMP = window.IMP; // 생략가능
+      IMP.init('imp15330432');
+      // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
+      // i'mport 관리자 페이지 -> 내정보 -> 가맹점식별코드
+      IMP.request_pay({
+         pg: 'inicis', // version 1.1.0부터 지원.
+         /*
+             'kakao':카카오페이,
+             html5_inicis':이니시스(웹표준결제)
+             'nice':나이스페이
+             'jtnet':제이티넷
+             'uplus':LG유플러스
+             'danal':다날
+             'payco':페이코
+             'syrup':시럽페이
+             'paypal':페이팔
+             */
+         pay_method: 'card',
+         /*
+             'samsung':삼성페이,
+             'card':신용카드,
+             'trans':실시간계좌이체,
+             'vbank':가상계좌,
+             'phone':휴대폰소액결제
+             */
+         merchant_uid: 'merchant_' + new Date().getTime(),
+         /*
+             merchant_uid에 경우
+             https://docs.iamport.kr/implementation/payment
+             위에 url에 따라가시면 넣을 수 있는 방법이 있습니다.
+             참고하세요.
+             나중에 포스팅 해볼게요.
+             */
+         name: '주문명:결제테스트',
+         //결제창에서 보여질 이름
+         amount: 3000,
+         //가격
+         buyer_email: 'iamport@siot.do',
+         buyer_name: '구매자이름',
+         buyer_tel: '010-1234-5678',
+         buyer_addr: '서울특별시 강남구 삼성동',
+         buyer_postcode: '123-456',
+         m_redirect_url: 'https://www.yourdomain.com/payments/complete'
+         /*
+             모바일 결제시,
+             결제가 끝나고 랜딩되는 URL을 지정
+             (카카오페이, 페이코, 다날의 경우는 필요없음. PC와 마찬가지로 callback함수로 결과가 떨어짐)
+             */
+      }, function (rsp) {
+         console.log(rsp);
+         if (rsp.success) {
+             var PMID = $("#CAMID").val();
+             var PSNUM = $("#shop").val();
+             var PCANUM = $("#PCANUM").val();
+             var PTOTAL = $("#PTOTAL").val();
+             $.ajax({
+                type: "POST",
+                url: "P_Write",
+                data : {"PMID":PMID,"PSNUM":PSNUM, "PCANUM":PCANUM, "PTOTAL":PTOTAL},
+                dataType : "json",
+                success: function (result){
+                    if(confirm("결제가 완료되었습니다.")){
+                        PO_Modify();
+                    }
+                },
+                error: function (){
+                    alert("실패!");
+                }
+             });
+         } else {
+            var msg = '결제에 실패하였습니다.';
+            msg += '에러내용 : ' + rsp.error_msg;
+            alert(msg);
+         }
+      });
+   });
+   function PO_Modify(){
+       var point = document.getElementById("point");
+   }
+</script>
+<!-- ajax -->
+<script>
+	$(document).ready(function(){
+		// 문서가 시작되면 해당 함수 실행
+		// tableContent : th:each가 들어간 tr 요소
+		// .length : 해당 요소의 길이(크기)
+		var tableContent = $("#tableContent").length;
+		// tr의 길이가 0보다 크면 ajax 실행
+		if(tableContent > 0){
+			// CAMID 의 value
+			var CAMID = $("#CAMID").val();
+			$.ajax({
+				type : "POST",
+				url : "CA_PTotal",
+				data : {"CAMID": CAMID},
+				dataType : "json",
+				success : function(result){
+					CA_PTotal(result);
+				},
+				error : function(){
+					alert("총 합계 출력 실패!");
+				}
+			});
+		}
+		// 잔액 조회
+		var MID = $("#CAMID").val();
+		// 잔액 조회를 하는 ajax
+		$.ajax({
+			type : "POST",
+			url : "M_Total",
+			data : {"MID": MID},
+			dataType : "json",
+			success : function(result){
+				M_Total(result);
+				P_Use(result);
+			},
+			error : function(){
+				alert("잔액 조회 실패!");
+			}
+		});
+		// 가맹점 목록 불러오기
+        $.ajax({
+            type : "POST",
+            url : "PS_List",
+            dataType : "json",
+            success : function (yunji){
+                PS_List(yunji);
+            },
+            error : function (){
+                alert("실패!");
+            }
+        });
+	});
+
+	// 포인트 사용
+	function P_Use(result){
+		// point의 value(값) 대입
+		var point = document.getElementById("point");
+		// PTOTAL의 value(값) 대입
+		var CATOTAL = document.getElementById("CATOTAL").value;
+		// restPrice(실 결제금액)이라는 id를 가진 요소 대입
+		var restPrice = document.getElementById("restPrice");
+		// restPoint(잔여 포인트)이라는 id를 가진 요소 대입
+		var restPoint = document.getElementById("restPoint");
+		point.oninput = function(){
+			if(Number(point.value) <= point.placeholder){
+				restPoint.innerHTML = point.placeholder - Number(point.value) + "P";
+				var output = "";
+				// PTOTAL이라는 input에 포인트 사용 계산
+				output += "<input type='text' value='" + (CATOTAL - Number(point.value)) +"' name='PTOTAL' id='PTOTAL'/>원";
+				// restTotal에 대입
+				restPrice.innerHTML = output;
+			} else {
+				alert("회원님의 잔여 포인트보다 크게 입력하셨습니다.");
+				restPoint.innerHTML = point.placeholder;
+				document.getElementById("PTOTAL").value = CATOTAL;
+				point.value = "";
+			}
+		}
+	}
+	
+	// 포인트 출력
+	function M_Total(result){
+		// 사용할 포인트를 출력할 곳 지정
+		var usePoint = document.getElementById("usePoint");
+		var output = "";
+		// 사용 가능한 포인트를 input에 출력
+		output += "<input type='text' class='form-control' placeholder='" + result.mpoint + "' id='point' style='display: inline-block;'/> P";
+		usePoint.innerHTML = output;
+	}
+	
+	// 총 합계를 더해주는 함수
+	function CA_PTotal(result){
+		// total 값 초기화
+		var total = 0;
+		// result 길이만큼 더하여 total에 값 대입
+		for(var i in result){
+			total += result[i];
+		}
+		// PTOTAL이라는 id를 가진 곳에 value total로 대입
+		var CATOTAL = document.getElementById("CATOTAL").value = total;
+	}
+	
+	// 가맹점 출력
+    function PS_List(yunji){
+        var shop = document.getElementById("shop");
+        var output ="";
+        for(i in yunji){
+            output += "<option value='"+ yunji[i].snum + "'>" + yunji[i].sname +"</option>";
+        }
+        shop.innerHTML = output;
+    }
+</script>
+</body>
+</html>

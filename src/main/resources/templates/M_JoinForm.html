@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>회원 가입</title>
+    <!-- META TAG -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="SDK" />
+	<meta name="description" content="특별한 술을 체험" />
+	<meta name="date" content="2022월06월17일" />
+	<!-- CSS, FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<!-- navigation : start -->
+	<nav th:replace="nav.html :: nav"></nav>
+	<!-- navigation : end -->
+	<!-- background : start -->
+	<section class="bg-wrap"></section>
+	<!-- background : end -->
+	<section class="contact-section">
+	    <div class="container mt-5">
+	        <div class="row block-9">
+	            <div class="col-md-12">
+	                <div class="row">
+	                    <div class="col-md-12 mb-4">
+	                        <h2 class="h4">회원정보 작성</h2>
+	                    </div>
+	
+	                    <div class="col-md-12 mb-3">
+	                        <form name="jumin_num" onsubmit="return check_jumin()" method="GET">
+	                        <p><span>주민등록번호:</span> </p>
+	                        <input type="text" name="jumin1" maxlength="6" size="6"> - <input type="password" name="jumin2" maxlength="7" size="7" onblur="check_jumin()"/>
+	                        <input type="submit" name="send" value="조회" />
+	
+	                        </form>
+	                    </div>
+	
+	                    <form action="M_Join" name="mem" method="POST" enctype="multipart/form-data" class="contact-form">
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>아이디:</span> <input type="text" name="MID" class="form-control"></p>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>비밀번호:</span> <input type="password" name="MPW" class="form-control"></p>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>이름:</span> <input type="text" name="MNAME" class="form-control"></p>
+	                        </div>
+	
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>생년월일:</span> <input type="date" name="MBIRTH" class="form-control"></p>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>이메일:</span> <input type="email" name="MEMAIL" class="form-control"></p>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>연락처:</span> <input type="text" name="MPHONE" class="form-control"></p>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>주소:</span>
+	                                <input type="text" id="sample6_postcode" placeholder="우편번호" name="addr1" class="form-control">
+	                                <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+	                                <input type="text" id="sample6_address" placeholder="주소" name="addr2" class="form-control"><br>
+	                                <input type="text" id="sample6_detailAddress" placeholder="상세주소" name="addr3" class="form-control"></p>
+	                        </div>
+	                        <div class="col-md-12 mb-3">
+	                            <p><span>프로필:</span> <input type="file" name="MPROFILE"></p>
+	                        </div>
+	                        <div class="form-group col-md-12">
+	                            <div class="form-group">
+	                                <input class="btn btn-primary py-3 px-5" type="submit" value="가입">
+	                                <a class="btn btn-primary py-3 px-5" href="javascript:window.history.back();" name="Back">뒤로가기</a>
+	                            </div>
+	                        </div>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+	<!-- footer : start -->
+	<footer th:replace="footer.html :: footer"></footer>
+	<!-- footer : end -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-migrate-3.0.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.stellar.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/aos.js"></script>
+	<script src="js/jquery.animateNumber.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/jquery.timepicker.min.js"></script>
+	<script src="js/scrollax.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                if (data.userSelectedType === 'R') {
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+
+                }
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sample6_postcode').value = data.zonecode;
+                document.getElementById("sample6_address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("sample6_detailAddress").focus();
+            }
+        }).open();
+    }
+</script>
+
+<script>
+    function check_jumin() {
+        var chk = 0;
+        var yy = document.jumin_num.jumin1.value.substring(0,2);
+        var mm = document.jumin_num.jumin1.value.substring(2,4);
+        var dd = document.jumin_num.jumin1.value.substring(4,6);
+        var sex = document.jumin_num.jumin2.value.substring(0,1);
+
+        var gijun_date1 = 40101;
+        var gijun_date2 = 221231;
+
+        if (document.jumin_num.jumin2.value.split("").join("")=="")
+        {
+            alert('주민등록번호를 입력하십시오.');
+            document.jumin_num.jumin1.focus();
+            return false;
+        }
+
+        if (document.jumin_num.jumin1.value.length!=6){
+            alert('주민등록번호 앞자리를 입력하십시오');
+            document.jumin_num.jumin1.focus();
+            return false;
+        }
+
+        if (document.jumin_num.jumin2.value.length!=7){
+            alert('주민등록번호 뒷자리를 입력하십시오');
+            document.jumin_num.jumin2.focus();
+            return false;
+        }
+
+        if (isNaN(document.jumin_num.jumin1.value) || isNaN(document.jumin_num.jumin2.value)){
+            document.jumin_num.jumin1.value = ""
+            document.jumin_num.jumin2.value = ""
+            alert('주민등록번호는 숫자만 가능합니다.');
+            return false;
+            }
+
+        if ((document.jumin_num.jumin1.value.length!=6) || (mm <1||mm>12||dd<1)){
+            document.jumin_num.jumin1.value=""
+            alert('주민등록번호 앞자리가 잘못되었습니다.');
+            document.jumin_num.jumin1.focus();
+            return false;
+        }
+
+        if ((sex != 1 && sex != 2 && sex != 3 && sex != 4) || (document.jumin_num.jumin2.value.length!=7)){
+            document.jumin_num.jumin2.value=""
+            alert('주민등록번호 뒷자리가 잘못되었습니다.');
+            document.jumin_num.jumin2.focus();
+            return false;
+        }
+
+
+
+        if (document.jumin_num.jumin1.value < gijun_date1 || gijun_date2 < document.jumin_num.jumin1.value){
+            alert('환영합니다. 특별한 술을 찾는 곳, 드숑마숑 입니다.');
+            document.mem.MID.focus();
+            return false;
+        }
+        else {
+            alert('미성년자는 입장할 수 없습니다. 성인이 된 후에 다시 들려주세요.');
+            document.location="javascript:history.back();";
+            return false;
+        }
+
+        return true;
+    }
+
+    // 주민번호 text 자동 이동 function
+    function next_move(obj){
+        if (obj.value.length > 5){
+            jumin_num.jumin2.focus();
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdk.dm.dao.S_DAO">
+	<!-- 가맹점 등록 -->
+    <insert id="S_Write" parameterType="shop">
+        INSERT INTO SHOP
+        VALUES (SHOP_SEQ.NEXTVAL, #{SNAME}, #{SADDR}, #{SPHONE}, #{SBOSS})
+    </insert>
+    <!-- 가맹점 목록 -->
+    <select id="S_List" resultType="shop">
+        SELECT * FROM SHOP
+    </select>
+    <!-- 가맹점 상세 -->
+    <select id="S_View" parameterType="int" resultType="shop">
+        SELECT * FROM SHOP WHERE SNUM = #{SNUM}
+    </select>
+    <!-- 가맹점 수정 -->
+    <update id="S_Modify" parameterType="shop">
+        UPDATE SHOP SET SNAME=#{SNAME}, SADDR=#{SADDR}, SPHONE=#{SPHONE}, SBOSS=#{SBOSS} WHERE SNUM=#{SNUM}
+    </update>
+    <!-- 가맹점 삭제 -->
+    <delete id="S_Delete" parameterType="int">
+        DELETE FROM SHOP WHERE SNUM=#{SNUM}
+    </delete>
+</mapper>

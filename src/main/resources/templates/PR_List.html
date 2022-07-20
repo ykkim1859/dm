@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <meta name="author" content="SDK" />
+    <meta name="description" content="관리자 - 술 목록 페이지" />
+    <meta name="date" content="2022. 06. 17" />
+    <title>관리자 - 술 목록 페이지</title>
+</head>
+
+<style>
+    table{
+        border-collapse: collapse;
+        width: 100%;
+        text-align: center;
+    }
+    tr, td, th {
+        border:1px solid #222;
+        padding: 10px;
+    }
+    .paging ul {
+        display: flex;
+        justify-content: center;
+    }
+    a, a:hover, a:active, a:visited {
+        text-decoration: none;
+        color: #222;
+    }
+    .paging ul li {
+        list-style: none;
+        border : 1px solid #222;
+        border-radius: 50%;
+        width: 30px;
+        line-height: 30px;
+        text-align: center;
+        height: 30px;
+        margin: 0 2px;
+    }
+</style>
+
+<body>
+<table>
+    <h2 class="h4" align="center">상품 목록</h2>
+    <tr>
+        <th>번호</th>
+        <th>이름</th>
+        <th>가격</th>
+        <th>수정</th>
+        <th>삭제</th>
+    </tr>
+    <tr th:each="list:${PR_List}">
+        <td th:text="${list.PRNUM}">번호</td>
+        <td><a th:href="@{PR_View(PRNUM=${list.PRNUM})}" th:text="${list.PRNAME}">이름</a></td>
+        <td th:text="${list.PRPRICE}">가격</td>
+        <td><a th:href="@{PR_ModiForm(PRNUM=${list.PRNUM})}">수정</a></td>
+        <td><a th:href="@{PR_Delete(PRNUM=${list.PRNUM})}">삭제</a></td>
+    </tr>
+
+</table>
+
+</body>
+</html>

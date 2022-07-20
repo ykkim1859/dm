@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>게시글 작성</title>
+	<!-- META TAG -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="SDK" />
+	<meta name="description" content="특별한 술을 체험" />
+	<meta name="date" content="2022월06월17일" />
+	<!-- CSS, FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+	<th:block th:if="${session.loginId eq null}">
+		<script>
+			alert('로그인 후 이용해 주세요.');
+			location.href="M_LoginForm";
+		</script>
+	</th:block>
+</head>
+<body>
+	<!-- navigation : start -->
+	<nav th:replace="nav.html :: nav"></nav>
+	<!-- navigation : end -->
+	<!-- background : start -->
+	<section class="bg-wrap"></section>
+	<!-- background : end -->
+	<section class="ftco-section contact-section">
+		<div class="container mt-5">
+			<div class="row block-9">
+				<div class="col-md-12 contact-info ftco-animate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="h4" style="margin-bottom: 40px;">게시글 작성</h2>
+						</div>
+						<div class="col-md-12 ftco-animate">
+							<form action="B_Write" class="contact-form" method="POST" enctype="multipart/form-data">
+								<input type="hidden" name="BMID" th:value="${session.loginId}"/>
+								<div class="form-group">
+									<select name="BGROUP">
+										<option value="notice" th:if="${session.loginId eq 'admin'}">공지</option>
+										<option value="free">자유</option>
+										<option value="class">모임</option>
+										<option value="game">술게임</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" name="BTITLE" placeholder="제목">
+								</div>
+								<div class="form-group">
+									<textarea class="form-control" name="BCONTENT" placeholder="내용" cols="30" rows="18"></textarea>
+								</div>
+								<div class="form-group">
+									<input type="file" name="BFILE" class="form-control" >
+								</div>
+								<div class="form-group">
+									<input type="submit" value="작성" class="btn btn-primary p-3 px-xl-4 py-xl-3">
+									<a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">취소</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- footer : start -->
+	<footer th:replace="footer.html :: footer"></footer>
+	<!-- footer : end -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-migrate-3.0.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.stellar.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/aos.js"></script>
+	<script src="js/jquery.animateNumber.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/jquery.timepicker.min.js"></script>
+	<script src="js/scrollax.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

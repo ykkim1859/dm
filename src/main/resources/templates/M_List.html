@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <meta name="author" content="SDK" />
+    <meta name="description" content="관리자 - 회원 목록" />
+    <meta name="date" content="2022년 06월 21일" />
+    <title>관리자 - 회원 목록</title>
+</head>
+    <style>
+        table{
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+        tr, td, th {
+            border:1px solid #222;
+            padding: 10px;
+        }
+        .paging ul {
+            display: flex;
+            justify-content: center;
+        }
+        a, a:hover, a:active, a:visited {
+            text-decoration: none;
+            color: #222;
+        }
+        .paging ul li {
+            list-style: none;
+            border : 1px solid #222;
+            border-radius: 50%;
+            width: 30px;
+            line-height: 30px;
+            text-align: center;
+            height: 30px;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <h2 class="h4" align="center">회원 목록</h2>
+    <tr>
+        <th>아이디</th>
+        <th>이름</th>
+        <th>이메일</th>
+        <th>잔여 포인트</th>
+        <th>삭제</th>
+    <tr>
+    <tr th:each="member:${M_List}">
+        <td>
+            <a th:href="@{M_View(MID=${member.MID})}" th:text="${member.MID}"></a>
+        </td>
+        <td>
+            <p th:text="${member.MNAME}"></p>
+        </td>
+        <td>
+            <p th:text="${member.MEMAIL}"></p>
+        </td>
+        <td>
+            <p th:text="${member.MPOINT}"></p>
+        </td>
+        <td>
+            <a th:href="@{M_Delete(MID=${member.MID})}">삭제</a>
+        </td>
+    </tr>
+</table>
+<div class="paging">
+    <ul>
+        <li th:if="${paging.page <= 1}">
+            <a> &lt;</a>
+        </li>
+        <li th:if="${paging.page > 1}">
+            <a th:href="@{M_List(page=${paging.page-1},limit=${paging.limit})}"> &lt;</a>
+        </li>
+        <th:block th:with="start= ${paging.startPage}, end = ${paging.endPage}">
+            <li th:with="start= ${paging.startPage}, end = ${paging.endPage}"
+                th:each="i : ${#numbers.sequence(start,end)}">
+                <a th:if="${paging.page eq i}" th:text="${i}" style="color: #ccc;"></a>
+                <a th:unless="${paging.page eq i}" th:href="@{M_List(page=${i},limit=${paging.limit})}" th:text="${i}"></a>
+            </li>
+        </th:block>
+        <li th:if="${paging.page >= paging.maxPage}">
+            <a> &gt;</a>
+        </li>
+        <li th:if="${paging.page < paging.maxPage}">
+            <a th:href="@{M_List(page=${paging.page+1},limit=${paging.limit})}"> &gt;</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

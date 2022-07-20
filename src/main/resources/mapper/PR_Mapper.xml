@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdk.dm.dao.PR_DAO">
+    <!-- 추천 안주 조회 -->
+<!--    <select id="D_WriteForm" resultType="goods">-->
+<!--        SELECT FNUM, FNAME FROM FOOD-->
+<!--    </select>-->
+    <!-- 상품 등록 -->
+    <insert id="PR_Write" parameterType="product">
+        INSERT INTO PRODUCT VALUES(PRODUCT_SEQ.NEXTVAL, #{PRNAME}, #{PRPRICE}, #{PRCONTENT}, #{PRFILENAME}, #{PRTNUM}, #{PRKNUM})
+    </insert>
+    <!-- 상품 목록 -->
+    <select id="PR_List" parameterType="tk" resultType="product">
+        SELECT * FROM PRODUCT WHERE PRTNUM = #{PRTNUM} AND PRKNUM = #{PRKNUM}
+    </select>
+    <!-- 상품 상세 -->
+    <select id="PR_View" parameterType="int" resultType="product">
+        SELECT PR.PRNUM, PR.PRNAME, PR.PRPRICE, PR.PRCONTENT, PR.PRFILENAME, T.TNAME, K.KNAME, PR.PRKNUM, PR.PRTNUM
+        FROM PRODUCT PR, TYPE T, KIND K
+        WHERE PRNUM=#{PRNUM} AND PR.PRTNUM = T.TNUM AND PR.PRKNUM = K.KNUM
+    </select>
+    <!-- 상품 수정 -->
+    <update id="PR_Modify" parameterType="product">
+        UPDATE PRODUCT SET PRNAME=#{PRNAME}, PRPRICE=#{PRPRICE}, PRCONTENT=#{PRCONTENT}, PRFILENAME=#{PRFILENAME}, PRTNUM=#{PRTNUM}, PRKNUM=#{PRKNUM} WHERE PRNUM=#{PRNUM}
+    </update>
+    <!-- 상품 삭제 -->
+    <delete id="PR_Delete" parameterType="int">
+        DELETE FROM PRODUCT WHERE PRNUM=#{PRNUM}
+    </delete>
+    
+    <!-- 회원 -->
+    <!-- 상품 목록 -->
+    <select id="MPR_List" parameterType="tk" resultType="product">
+        SELECT * FROM PRODUCT WHERE PRTNUM = #{PRTNUM} AND PRKNUM = #{PRKNUM}
+    </select>
+    <!-- 상품 상세 -->
+    <select id="MPR_View" parameterType="int" resultType="product">
+        SELECT * FROM PRODUCT WHERE PRNUM = #{PRNUM}
+    </select>
+</mapper>

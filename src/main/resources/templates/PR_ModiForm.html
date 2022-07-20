@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <meta name="author" content="SDK" />
+    <meta name="description" content="관리자 - 상품 수정 페이지" />
+    <meta name="date" content="2022. 06. 17" />
+    <title>관리자 - 상품 수정 페이지</title>
+</head>
+<body>
+
+<form action="PR_Modify" method="POST" enctype="multipart/form-data">
+    <input type="hidden" th:value="${product.PRTNUM}" name="PRTNUM" />
+    <input type="hidden" th:value="${product.PRKNUM}" name="PRKNUM" />
+    <input type="hidden" th:value="${product.PRNUM}" name="PRNUM"/>
+    <table>
+        <h2 class="h4" align="center">상품 수정</h2>
+        <tr>
+            <th>상품분류</th>
+            <td>
+                <th:block th:text="${product.TNAME}"></th:block>
+            </td>
+        </tr>
+
+        <tr>
+            <th>상품명</th>
+            <td><input type="text" name="PRNAME" th:placeholder="${product.PRNAME}"></td>
+        </tr>
+
+        <tr>
+            <th>가격</th>
+            <td><input type="text" name="PRPRICE" th:placeholder="${product.PRPRICE}"></td>
+        </tr>
+
+        <tr>
+            <th>설명</th>
+            <td><input type="text" name="PRCONTENT" th:placeholder="${product.PRCONTENT}"></td>
+        </tr>
+
+        <tr>
+            <th>사진</th>
+            <td><input type="file" name="PRFILE"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="수정" />
+            </td>
+        </tr>
+
+    </table>
+
+</form>
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sdk.dm.dao.CA_DAO">
+	<!-- 장바구니 저장 -->
+	<insert id="CA_Write" parameterType="cart">
+		INSERT INTO CART VALUES(CART_SEQ.NEXTVAL, #{CAPRNUM}, #{CAPRTNUM}, #{CAMID}, #{CACOUNT}, #{CATOTAL}, #{CAPRICE})
+	</insert>
+	<!-- 장바구니에 기존 상품이 있는지 확인 -->
+	<select id="CA_PRNUM" parameterType="int" resultType="Integer">
+		SELECT CACOUNT FROM CART WHERE CAPRNUM = #{CAPRNUM}
+	</select>
+	<!-- 기존에 존재할 때 장바구니 수정 -->
+	<update id="CA_Add" parameterType="cart">
+	 	UPDATE CART SET CACOUNT = #{CACOUNT} WHERE CAPRNUM = #{CAPRNUM}
+	</update>
+	<!-- 장바구니 목록 -->
+	<select id="CA_List" parameterType="String" resultType="capr">
+		SELECT CA.CANUM, PR.PRNUM, PR.PRTNUM, PR.PRNAME, PR.PRCONTENT, PR.PRFILENAME, CA.CAMID, CA.CACOUNT, CA.CATOTAL, CA.CAPRICE
+		FROM CART CA, PRODUCT PR
+		WHERE CAMID = #{CAMID} AND PR.PRNUM = CA.CAPRNUM
+	</select>
+	<!-- 장바구니 수량 수정 -->
+	<update id="CA_Modify" parameterType="cart">
+		UPDATE CART SET CACOUNT = #{CACOUNT}, CATOTAL = #{CATOTAL} WHERE CANUM = #{CANUM} AND CAMID = #{CAMID}
+	</update>
+	<!-- 장바구니 상품 별 합계 리스트로 갖고 오기 -->
+	<select id="CA_Total" parameterType="String" resultType="Integer">
+		SELECT CATOTAL FROM CART WHERE CAMID = #{CAMID}
+	</select>
+	<!-- 장바구니 전체 삭제 -->
+   <delete id="CA_DeleteAll" parameterType="String">
+		DELETE FROM CART WHERE CAMID = #{CAMID}
+   </delete>
+   <!-- 장바구니 삭제 (개별) -->
+	<delete id="CA_DeleteChoice" parameterType="int">
+		DELETE FROM CART WHERE CANUM=#{CANUM}
+	</delete>
+</mapper>
